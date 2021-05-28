@@ -1,0 +1,125 @@
+{
+  "name": "Hello World",
+  "icons": [
+    {
+      "src": "../icons/1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/2.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "../icons/3.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "../icons/4.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "../icons/1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/2.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "../icons/3.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "../icons/4.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "../icons/1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/2.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "../icons/3.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "../icons/4.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "../icons/1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/2.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "../icons/3.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "../icons/4.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "../icons/1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/2.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "../icons/3.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "../icons/4.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "../icons/1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/2.webp",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/3.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../icons/4.jpeg",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
