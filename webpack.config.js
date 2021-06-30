@@ -1,4 +1,3 @@
-const path = require("path");
 const { WebManifestPlugin } = require("./loader/plugin");
 
 module.exports = {
