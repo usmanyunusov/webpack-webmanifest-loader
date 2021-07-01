@@ -22,8 +22,13 @@ function generateManifest(content, loaderContext) {
 function getImportCode(content) {
   if (content && content.icons && Array.isArray(content.icons)) {
     const code = [];
+
     for (const icon of content.icons) {
-      code.push(`require("${icon.src}");`);
+      const dep = `require("${icon.src}");`;
+
+      if (!code.includes(dep)) {
+        code.push(dep);
+      }
     }
 
     return `${code.join("\n")}`;
@@ -47,6 +52,17 @@ function parseJSON(content, loaderContext) {
 module.exports = function loader(content) {
   const options = getOptions(this) || {};
   const callback = this.callback;
+
+  if (!this[NAMESPACE]) {
+    callback(
+      new Error(
+        "You forgot to add 'webpack-webmanifest-plugin' plugin (i.e. `{ plugins: [new WebManifestPlugin()] }`)"
+      )
+    );
+
+    return;
+  }
+
   const manifest = parseJSON(content, this);
   const importCode = getImportCode(manifest);
 
@@ -64,7 +80,7 @@ module.exports = function loader(content) {
     this._compilation.outputOptions.assetModuleFilename
   );
 
-  this[NAMESPACE] && (this[NAMESPACE].options.manifest = manifest);
+  this[NAMESPACE].options.manifest = manifest;
 
   callback(null, `${importCode}`);
   generateManifest(manifest, this);
