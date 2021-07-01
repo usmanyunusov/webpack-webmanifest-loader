@@ -1,12 +1,10 @@
 const NAMESPACE = "WebManifestPlugin";
-const { emitHook } = require("./hooks");
-
 const defaults = {
   fileName: "manifest",
   serialize(manifest) {
     return JSON.stringify(manifest, null, 2);
   },
-  manifest: null,
+  manifest: {},
 };
 
 class WebManifestPlugin {
@@ -15,30 +13,22 @@ class WebManifestPlugin {
   }
 
   apply(compiler) {
-    let moduleAssets = {};
-
-    const emit = emitHook.bind(this, {
-      compiler,
-      options: this.options,
-      moduleAssets,
-    });
-
-    const hookOptions = {
-      name: NAMESPACE,
-      stage: Infinity,
-    };
-
-    compiler.hooks.compilation.tap(hookOptions, (compilation) => {
+    compiler.hooks.compilation.tap(NAMESPACE, (compilation) => {
       const NormalModule = require("webpack/lib/NormalModule");
       NormalModule.getCompilationHooks(compilation).loader.tap(
-        hookOptions,
+        NAMESPACE,
         (loaderContext) => {
-          loaderContext[hookOptions.name] = this;
+          loaderContext[NAMESPACE] = this;
         }
       );
 
-      compilation.hooks.processAssets.tap(hookOptions, () => {
-        emit(compilation);
+      compilation.hooks.afterProcessAssets.tap(NAMESPACE, () => {
+        const manifestJson = this.options.serialize(this.options.manifest);
+
+        compilation.assets[`${this.options.fileName}.webmanifest`] = {
+          source: () => manifestJson,
+          size: () => manifestJson.length,
+        };
       });
     });
   }

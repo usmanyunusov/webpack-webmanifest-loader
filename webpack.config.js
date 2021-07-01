@@ -8,17 +8,13 @@ module.exports = {
         type: "asset/resource",
       },
       {
-        oneOf: [
+        test: /\.webmanifest$/i,
+        use: [
           {
-            test: /\.webmanifest$/i,
-            use: [
-              {
-                loader: WebManifestPlugin.loader,
-                options: {
-                  publicPath: "icons",
-                },
-              },
-            ],
+            loader: WebManifestPlugin.loader,
+            options: {
+              publicPath: "icons",
+            },
           },
         ],
       },

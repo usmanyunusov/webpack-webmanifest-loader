@@ -1,12 +1,12 @@
-const loaderUtils = require("loader-utils");
+const { getOptions, urlToRequest } = require("loader-utils");
 const path = require("path");
 const { NAMESPACE } = require("./plugin");
 
-function generateManifest(content, publicPath, loaderContext) {
+function generateManifest(content, loaderContext) {
   if (content && content.icons && Array.isArray(content.icons)) {
     for (const icon of content.icons) {
       const context = loaderContext.context;
-      const request = loaderUtils.urlToRequest(icon.src);
+      const request = urlToRequest(icon.src);
 
       loaderContext.resolve(context, request, (err, filename) => {
         loaderContext.addDependency(filename);
@@ -32,20 +32,22 @@ function getImportCode(content) {
   return "";
 }
 
-function parseJSON(content) {
+function parseJSON(content, loaderContext) {
   try {
     return JSON.parse(content);
   } catch (error) {
-    return this.callback(
-      new Error(`Invalid JSON in Web App Manifest: ${this.resourcePath}`)
+    return loaderContext.callback(
+      new Error(
+        `Invalid JSON in Web App Manifest: ${loaderContext.resourcePath}`
+      )
     );
   }
 }
 
 module.exports = function loader(content) {
-  const options = loaderUtils.getOptions(this) || {};
+  const options = getOptions(this) || {};
   const callback = this.callback;
-  const manifest = parseJSON.call(this, content);
+  const manifest = parseJSON(content, this);
   const importCode = getImportCode(manifest);
 
   const publicPath =
@@ -65,5 +67,5 @@ module.exports = function loader(content) {
   this[NAMESPACE] && (this[NAMESPACE].options.manifest = manifest);
 
   callback(null, `${importCode}`);
-  generateManifest(manifest, publicPath, this);
+  generateManifest(manifest, this);
 };
