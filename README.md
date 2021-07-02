@@ -3,7 +3,7 @@
 ## Install
 
 ```console
-npm install webpack-webmanifest-plugin --save-dev
+npm install https://github.com/usmanyunusov/webpack-webmanifest-plugin.git --save-dev
 ```
 
 ## Usage
