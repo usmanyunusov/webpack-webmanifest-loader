@@ -5,5 +5,8 @@
   "main": "./src/plugin.js",
   "dependencies": {
     "loader-utils": "^2.0.0"
+  },
+  "devDependencies": {
+    "clean-publish": "^2.2.0"
   }
 }

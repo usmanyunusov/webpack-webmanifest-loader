@@ -1,5 +1,4 @@
 const NAMESPACE = "WebManifestPlugin";
-const path = require("path");
 
 const defaults = {
   fileName: "manifest",
@@ -49,7 +48,7 @@ class WebManifestPlugin {
         }
 
         this.options.manifest.icons = this.options.manifest.icons.map(
-          (icon) => ({ ...icon, src: assetMap[icon.src] || icon.src })
+          (icon) => ({ ...icon, src: assetMap[icon.src] || "" })
         );
 
         const manifestJson = this.options.serialize(this.options.manifest);
