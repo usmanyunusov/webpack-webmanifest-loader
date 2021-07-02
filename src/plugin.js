@@ -3,7 +3,7 @@ const NAMESPACE = "WebManifestPlugin";
 const defaults = {
   fileName: "manifest",
   serialize(manifest) {
-    return JSON.stringify(manifest, null, 2);
+    return JSON.stringify(manifest, null, null);
   },
   manifest: {},
   manifestRequest: null,
