@@ -1,7 +1,7 @@
 {
   "name": "webpack-manifest-loader",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "loader/plugin.js",
   "scripts": {
     "test": "webpack --mode production"
   },

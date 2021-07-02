@@ -1,30 +1,13 @@
-const { getOptions, urlToRequest } = require("loader-utils");
+const { getOptions } = require("loader-utils");
 const path = require("path");
 const { NAMESPACE } = require("./plugin");
 
-function generateManifest(content, loaderContext) {
-  if (content && content.icons && Array.isArray(content.icons)) {
-    for (const icon of content.icons) {
-      const context = loaderContext.context;
-      const request = urlToRequest(icon.src);
-
-      loaderContext.resolve(context, request, (err, filename) => {
-        loaderContext.addDependency(filename);
-
-        loaderContext.loadModule(filename, (error, source, map, module) => {
-          icon.src = module.buildInfo.filename;
-        });
-      });
-    }
-  }
-}
-
-function getImportCode(content) {
-  if (content && content.icons && Array.isArray(content.icons)) {
+function getImportCode(icons) {
+  if (icons && Array.isArray(icons)) {
     const code = [];
 
-    for (const icon of content.icons) {
-      const dep = `require("${icon.src}");`;
+    for (const index in icons) {
+      const dep = `require("${icons[index].src}");`;
 
       if (!code.includes(dep)) {
         code.push(dep);
@@ -64,7 +47,7 @@ module.exports = function loader(content) {
   }
 
   const manifest = parseJSON(content, this);
-  const importCode = getImportCode(manifest);
+  const importCode = getImportCode(manifest.icons);
 
   const publicPath =
     typeof options.publicPath === "string"
@@ -81,7 +64,7 @@ module.exports = function loader(content) {
   );
 
   this[NAMESPACE].options.manifest = manifest;
+  this[NAMESPACE].options.manifestRequest = this.request;
 
   callback(null, `${importCode}`);
-  generateManifest(manifest, this);
 };
