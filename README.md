@@ -1,15 +1,16 @@
 # webpack-webmanifest-plugin
 
-## Install
+# Getting Started
+
+To begin, you'll need to install:
 
 ```console
-npm install https://github.com/usmanyunusov/webpack-webmanifest-plugin.git --save-dev
+webpack-manifest-plugin
+npm install --save-dev webpack-webmanifest-plugin
 ```
 
-## Usage
-
+### manifest.webmanifest
 ```json
-// manifest.webmanifest
 {
   "name": "HackerWeb",
   "icons": [
@@ -22,13 +23,15 @@ npm install https://github.com/usmanyunusov/webpack-webmanifest-plugin.git --sav
 }
 ```
 
+### file.js
 ```js
-// foo.js
 require("./manifest.webmanifest");
 ```
 
+Then add the plugin to your webpack config. For example:
+
+### webpack.config.js
 ```js
-// webpack.config.js
 const { WebManifestPlugin } = require("webpack-webmanifest-plugin");
 
 module.exports = {
