@@ -1,6 +1,6 @@
 # webpack-webmanifest-plugin
 
-# Getting Started
+## Getting Started
 
 To begin, you'll need to install:
 
