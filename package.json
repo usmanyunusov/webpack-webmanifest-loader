@@ -1,12 +1,17 @@
 {
   "name": "webpack-webmanifest-plugin",
   "author": "Usman Yunusov <usman.iunusov@gmail.com>",
-  "version": "0.0.1",
-  "main": "./src/plugin.js",
+  "version": "0.0.2",
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "lint:prettier": "prettier \"{**/*,*}.js\" --write"
+  },
   "dependencies": {
     "loader-utils": "^2.0.0"
   },
   "devDependencies": {
-    "clean-publish": "^2.2.0"
+    "clean-publish": "^2.2.0",
+    "prettier": "^2.3.2"
   }
 }

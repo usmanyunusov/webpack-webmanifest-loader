@@ -1,39 +1,39 @@
-const NAMESPACE = "WebManifestPlugin";
+const NAMESPACE = 'WebManifestPlugin'
 
 const defaults = {
-  fileName: "manifest",
+  fileName: 'manifest',
   serialize(manifest) {
-    return JSON.stringify(manifest, null, null);
+    return JSON.stringify(manifest, null, null)
   },
   manifest: {},
   manifestRequest: null,
-};
+}
 
 class WebManifestPlugin {
   constructor(opts) {
-    this.options = Object.assign({}, defaults, opts);
-    this.originalSource = new Map();
+    this.options = Object.assign({}, defaults, opts)
+    this.originalSource = new Map()
   }
 
   async apply(compiler) {
     compiler.hooks.compilation.tap(NAMESPACE, (compilation) => {
-      const NormalModule = require("webpack/lib/NormalModule");
+      const NormalModule = require('webpack/lib/NormalModule')
       NormalModule.getCompilationHooks(compilation).loader.tap(
         NAMESPACE,
         (loaderContext) => {
-          loaderContext[NAMESPACE] = this;
-        }
-      );
+          loaderContext[NAMESPACE] = this
+        },
+      )
 
       compilation.hooks.afterProcessAssets.tap(NAMESPACE, () => {
-        const assetMap = {};
+        const assetMap = {}
         const stats = compilation.getStats().toJson({
           all: false,
           modules: true,
           cachedModules: true,
-        });
+        })
 
-        const { modules } = stats;
+        const { modules } = stats
 
         for (const module of modules) {
           if (
@@ -41,30 +41,30 @@ class WebManifestPlugin {
             module.issuer === this.options.manifestRequest
           ) {
             const { rawRequest, buildInfo } = compilation.findModule(
-              module.identifier
-            );
-            assetMap[rawRequest] = buildInfo.filename;
+              module.identifier,
+            )
+            assetMap[rawRequest] = buildInfo.filename
           }
         }
 
         this.options.manifest.icons = this.options.manifest.icons.map(
-          (icon) => ({ ...icon, src: assetMap[icon.src] || "" })
-        );
+          (icon) => ({ ...icon, src: assetMap[icon.src] || '' }),
+        )
 
-        const manifestJson = this.options.serialize(this.options.manifest);
+        const manifestJson = this.options.serialize(this.options.manifest)
 
         compilation.assets[`${this.options.fileName}.webmanifest`] = {
           source: () => manifestJson,
           size: () => manifestJson.length,
-        };
-      });
-    });
+        }
+      })
+    })
   }
 }
 
-WebManifestPlugin.loader = require.resolve("./loader");
+WebManifestPlugin.loader = require.resolve('./loader')
 
 module.exports = {
   WebManifestPlugin,
   NAMESPACE,
-};
+}
