@@ -14,7 +14,7 @@ npm install https://github.com/usmanyunusov/webpack-webmanifest-plugin.git --sav
   "name": "HackerWeb",
   "icons": [
     {
-      "src": "../images/touch/homescreen48.png", // relative path
+      "src": "../images/touch/homescreen48.png",
       "sizes": "48x48",
       "type": "image/png"
     },
@@ -28,6 +28,7 @@ require("./manifest.webmanifest");
 ```
 
 ```js
+// webpack.config.js
 const { WebManifestPlugin } = require("webpack-webmanifest-plugin");
 
 module.exports = {
@@ -52,10 +53,9 @@ module.exports = {
 };
 ```
 
-With the default options, the example above will create a manifest.webmanifest file in the output directory for the build.
+With the default options, the example above will create a `manifest.webmanifest` file in the output directory for the build.
 
 ```json
-// manifest.webmanifest
 {
   "name": "HackerWeb",
   "icons": [
