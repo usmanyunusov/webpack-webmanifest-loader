@@ -5,7 +5,6 @@
 To begin, you'll need to install:
 
 ```console
-webpack-manifest-plugin
 npm install --save-dev webpack-webmanifest-plugin
 ```
 
