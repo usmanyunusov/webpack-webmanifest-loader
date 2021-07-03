@@ -1,5 +1,5 @@
 {
-  "name": "webpack-manifest-loader",
+  "name": "webpack-webmanifest-plugin",
   "author": "Usman Yunusov <usman.iunusov@gmail.com>",
   "version": "0.0.1",
   "main": "./src/plugin.js",
