@@ -1,6 +1,6 @@
 const { getOptions } = require("loader-utils");
 const path = require("path");
-const { NAMESPACE } = require("./plugin");
+const { NAMESPACE } = require("./index");
 
 function getImportCode(icons) {
   if (icons && Array.isArray(icons)) {
