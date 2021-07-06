@@ -32,7 +32,7 @@ Then add the plugin to your webpack config. For example:
 
 #### webpack.config.js
 ```js
-const { WebManifestPlugin } = require("webpack-webmanifest-plugin");
+const WebManifestPlugin = require("webpack-webmanifest-plugin");
 
 module.exports = {
   module: {
