@@ -31,7 +31,7 @@ function parseJSON(content, loaderContext) {
 module.exports = function loader(content) {
   const callback = this.callback;
 
-  if (!this['WebManifestPlugin']) {
+  if (!this["WebManifestPlugin"]) {
     callback(
       new Error(
         "You forgot to add 'webpack-webmanifest-plugin' plugin (i.e. `{ plugins: [new WebManifestPlugin()] }`)"
@@ -44,8 +44,8 @@ module.exports = function loader(content) {
   const manifest = parseJSON(content, this);
   const importCode = getImportCode(manifest.icons);
 
-  this['WebManifestPlugin'].manifest = manifest;
-  this['WebManifestPlugin'].manifestRequest = this.request;
+  this["WebManifestPlugin"].manifest = manifest;
+  this["WebManifestPlugin"].manifestRequest = this.request;
 
   callback(null, `${importCode}`);
 };

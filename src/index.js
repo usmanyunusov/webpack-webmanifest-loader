@@ -31,52 +31,56 @@ class WebManifestPlugin {
         cachedModules: true,
       });
 
-      compilation.hooks.processAssets.tapAsync({
-        name: pluginName,
-        stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
-      }, (_, callback) => {
-        const assetMap = {};
-        const stats = compilation.getStats().toJson({
-          all: false,
-          modules: true,
-          cachedModules: true,
-        });
+      compilation.hooks.processAssets.tapAsync(
+        {
+          name: pluginName,
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+        },
+        (_, callback) => {
+          const assetMap = {};
+          const stats = compilation.getStats().toJson({
+            all: false,
+            modules: true,
+            cachedModules: true,
+          });
 
-        const { modules } = stats;
+          const { modules } = stats;
 
-        for (const module of modules) {
-          if (
-            this.manifestRequest &&
-            module.issuer === this.manifestRequest
-          ) {
-            const { rawRequest, buildInfo } = compilation.findModule(
-              module.identifier
-            );
+          for (const module of modules) {
+            if (
+              this.manifestRequest &&
+              module.issuer === this.manifestRequest
+            ) {
+              const { rawRequest, buildInfo } = compilation.findModule(
+                module.identifier
+              );
 
-            assetMap[rawRequest] = buildInfo.filename;
-          }
-        }
-
-        if (this.manifest) {
-          if (Object.keys(assetMap).length) {
-            this.manifest.icons = this.manifest.icons.map(
-              (icon) => ({ ...icon, src: assetMap[icon.src] || icon.src })
-            );
+              assetMap[rawRequest] = buildInfo.filename;
+            }
           }
 
-          const manifestJson = this.serialize(this.manifest);
+          if (this.manifest) {
+            if (Object.keys(assetMap).length) {
+              this.manifest.icons = this.manifest.icons.map((icon) => ({
+                ...icon,
+                src: assetMap[icon.src] || icon.src,
+              }));
+            }
 
-          compilation.assets[`${this.options.fileName}.webmanifest`] = {
-            source: () => manifestJson,
-            size: () => manifestJson.length,
-          };
+            const manifestJson = this.serialize(this.manifest);
+
+            compilation.assets[`${this.options.fileName}.webmanifest`] = {
+              source: () => manifestJson,
+              size: () => manifestJson.length,
+            };
+          }
+
+          callback();
         }
-
-        callback();
-      });
+      );
     });
   }
 }
 
 WebManifestPlugin.loader = require.resolve("./loader");
-module.exports = WebManifestPlugin
+module.exports = WebManifestPlugin;

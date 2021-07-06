@@ -21,8 +21,11 @@ npm install --save-dev webpack-webmanifest-plugin
 ```
 
 #### file.js
-```js
-require("./manifest.webmanifest");
+```html
+<head>
+  <title>Example</title>
+  <link rel="manifest" href="<%= require('../layout/base/manifest.webmanifest') %>" />
+</head>
 ```
 
 Then add the plugin to your webpack config. For example:
