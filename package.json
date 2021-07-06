@@ -1,7 +1,7 @@
 {
   "name": "webpack-webmanifest-plugin",
   "author": "Usman Yunusov <usman.iunusov@gmail.com>",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
