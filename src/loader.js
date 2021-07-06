@@ -1,7 +1,3 @@
-const { getOptions } = require("loader-utils");
-const path = require("path");
-const { NAMESPACE } = require("./index");
-
 function getImportCode(icons) {
   if (icons && Array.isArray(icons)) {
     const code = [];
@@ -33,10 +29,9 @@ function parseJSON(content, loaderContext) {
 }
 
 module.exports = function loader(content) {
-  const options = getOptions(this) || {};
   const callback = this.callback;
 
-  if (!this[NAMESPACE]) {
+  if (!this['WebManifestPlugin']) {
     callback(
       new Error(
         "You forgot to add 'webpack-webmanifest-plugin' plugin (i.e. `{ plugins: [new WebManifestPlugin()] }`)"
@@ -49,22 +44,8 @@ module.exports = function loader(content) {
   const manifest = parseJSON(content, this);
   const importCode = getImportCode(manifest.icons);
 
-  const publicPath =
-    typeof options.publicPath === "string"
-      ? options.publicPath === "auto"
-        ? ""
-        : options.publicPath
-      : this._compilation.outputOptions.publicPath === "auto"
-      ? ""
-      : this._compilation.outputOptions.publicPath;
-
-  this._compilation.outputOptions.assetModuleFilename = path.join(
-    publicPath,
-    this._compilation.outputOptions.assetModuleFilename
-  );
-
-  this[NAMESPACE].options.manifest = manifest;
-  this[NAMESPACE].options.manifestRequest = this.request;
+  this['WebManifestPlugin'].manifest = manifest;
+  this['WebManifestPlugin'].manifestRequest = this.request;
 
   callback(null, `${importCode}`);
 };

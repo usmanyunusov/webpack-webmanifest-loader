@@ -1,31 +1,40 @@
-const NAMESPACE = "WebManifestPlugin";
-
 const defaults = {
   fileName: "manifest",
-  serialize(manifest) {
-    return JSON.stringify(manifest, null, null);
-  },
-  manifest: {},
-  manifestRequest: null,
 };
 
 class WebManifestPlugin {
   constructor(opts) {
+    this.serialize = (manifest) => {
+      return JSON.stringify(manifest, null, null);
+    };
     this.options = Object.assign({}, defaults, opts);
     this.originalSource = new Map();
+    this.manifest = null;
+    this.manifestRequest = null;
   }
 
   async apply(compiler) {
-    compiler.hooks.compilation.tap(NAMESPACE, (compilation) => {
+    const pluginName = this.constructor.name;
+
+    compiler.hooks.compilation.tap(pluginName, (compilation) => {
       const NormalModule = require("webpack/lib/NormalModule");
       NormalModule.getCompilationHooks(compilation).loader.tap(
-        NAMESPACE,
+        pluginName,
         (loaderContext) => {
-          loaderContext[NAMESPACE] = this;
+          loaderContext[pluginName] = this;
         }
       );
 
-      compilation.hooks.afterProcessAssets.tap(NAMESPACE, () => {
+      const stats = compilation.getStats().toJson({
+        all: false,
+        modules: true,
+        cachedModules: true,
+      });
+
+      compilation.hooks.processAssets.tapAsync({
+        name: pluginName,
+        stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+      }, (_, callback) => {
         const assetMap = {};
         const stats = compilation.getStats().toJson({
           all: false,
@@ -37,34 +46,37 @@ class WebManifestPlugin {
 
         for (const module of modules) {
           if (
-            this.options.manifestRequest &&
-            module.issuer === this.options.manifestRequest
+            this.manifestRequest &&
+            module.issuer === this.manifestRequest
           ) {
             const { rawRequest, buildInfo } = compilation.findModule(
               module.identifier
             );
+
             assetMap[rawRequest] = buildInfo.filename;
           }
         }
 
-        this.options.manifest.icons = this.options.manifest.icons.map(
-          (icon) => ({ ...icon, src: assetMap[icon.src] || "" })
-        );
+        if (this.manifest) {
+          if (Object.keys(assetMap).length) {
+            this.manifest.icons = this.manifest.icons.map(
+              (icon) => ({ ...icon, src: assetMap[icon.src] || icon.src })
+            );
+          }
 
-        const manifestJson = this.options.serialize(this.options.manifest);
+          const manifestJson = this.serialize(this.manifest);
 
-        compilation.assets[`${this.options.fileName}.webmanifest`] = {
-          source: () => manifestJson,
-          size: () => manifestJson.length,
-        };
+          compilation.assets[`${this.options.fileName}.webmanifest`] = {
+            source: () => manifestJson,
+            size: () => manifestJson.length,
+          };
+        }
+
+        callback();
       });
     });
   }
 }
 
 WebManifestPlugin.loader = require.resolve("./loader");
-
-module.exports = {
-  WebManifestPlugin,
-  NAMESPACE,
-};
+module.exports = WebManifestPlugin
