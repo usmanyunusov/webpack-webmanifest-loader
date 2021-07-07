@@ -20,7 +20,7 @@ npm install --save-dev webpack-webmanifest-plugin
 }
 ```
 
-#### file.js
+#### index.html
 ```html
 <head>
   <title>Example</title>
