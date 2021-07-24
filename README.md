@@ -24,7 +24,7 @@ npm install --save-dev webpack-webmanifest-plugin
 ```html
 <head>
   <title>Example</title>
-  <link rel="manifest" href="<%= require('../layout/base/manifest.webmanifest') %>" />
+  <link rel="manifest" href="<%= require('../layout/base/manifest.webmanifest').default %>" />
 </head>
 ```
 
@@ -44,6 +44,7 @@ module.exports = {
       {
         test: /\.webmanifest$/i,
         use: [
+          'file-loader',
           {
             loader: WebManifestPlugin.loader,
           },
