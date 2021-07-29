@@ -3,7 +3,7 @@
 ## Getting Started
 
 ```console
-npm install --save-dev webpack-webmanifest-plugin
+npm install -D webpack-webmanifest-plugin
 ```
 
 #### manifest.webmanifest
@@ -24,7 +24,7 @@ npm install --save-dev webpack-webmanifest-plugin
 ```html
 <head>
   <title>Example</title>
-  <link rel="manifest" href="<%= require('../layout/base/manifest.webmanifest').default %>" />
+  <link rel="manifest" href="<%= require('../layout/base/manifest.webmanifest') %>" />
 </head>
 ```
 
@@ -43,40 +43,25 @@ module.exports = {
       },
       {
         test: /\.webmanifest$/i,
-        use: [
-          'file-loader',
-          {
-            loader: WebManifestPlugin.loader,
-          },
-        ],
+        use: WebManifestPlugin.loader,
+        type: "asset/resource",
       },
     ],
   },
-
-  plugins: [new WebManifestPlugin()],
 };
 ```
 
-With the default options, the example above will create a `manifest.webmanifest` file in the output directory for the build.
+With the default options, the example above will create a `[contenthash].webmanifest` file in the output directory for the build.
 
 ```json
 {
   "name": "HackerWeb",
   "icons": [
     {
-      "src": "[hash].png",
+      "src": "[contenthash].[ext]",
       "sizes": "48x48",
       "type": "image/png"
     },
   ],
 }
 ```
-
-### Plugin Options
-
-### `fileName`
-
-Type: `String`<br>
-Default: `manifest.webmanifest`
-
-This option determines the name of output file. By default the plugin will emit `manifest.webmanifest`

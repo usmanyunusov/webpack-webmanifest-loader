@@ -1,51 +1,74 @@
-function getImportCode(icons) {
-  if (icons && Array.isArray(icons)) {
-    const code = [];
+const path = require("path");
+const { parseJSON } = require("./utils");
 
-    for (const index in icons) {
-      const dep = `require("${icons[index].src}");`;
+module.exports = function (source) {
+  source = parseJSON(source, this);
 
-      if (!code.includes(dep)) {
-        code.push(dep);
-      }
+  if (source.icons && Array.isArray(source.icons)) {
+    for (const icon of source.icons) {
+      icon.src = this.data.assets[path.normalize(icon.src)];
+    }
+  }
+
+  return JSON.stringify(source);
+};
+
+module.exports.pitch = function (request) {
+  const { webpack } = this._compiler;
+  const { EntryPlugin, Compilation } = webpack;
+  const callback = this.async();
+
+  const webmanifestContext = {};
+  webmanifestContext.options = {
+    filename: "*",
+  };
+
+  webmanifestContext.compiler = this._compilation.createChildCompiler(
+    `webmanifest-loader ${request}`,
+    webmanifestContext.options
+  );
+
+  new EntryPlugin(
+    this.context,
+    `${request}.webpack[javascript/auto]!=!${path.resolve(
+      __dirname,
+      "./loader-icons.js"
+    )}!${request}`,
+    path.parse(this.resourcePath).name
+  ).apply(webmanifestContext.compiler);
+
+  webmanifestContext.compiler.hooks.compilation.tap(
+    `webmanifest-loader ${request}`,
+    (compilation) => {
+      compilation.hooks.processAssets.tap(
+        {
+          name: `webmanifest-loader ${request}`,
+          stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+        },
+        () => {
+          compilation.chunks.forEach((chunk) => {
+            chunk.files.forEach((file) => {
+              compilation.deleteAsset(file);
+            });
+          });
+        }
+      );
+    }
+  );
+
+  webmanifestContext.compiler.runAsChild((error, entries, compilation) => {
+    if (error) {
+      callback(new Error(error));
     }
 
-    return `${code.join("\n")}`;
-  }
+    const { assets } = compilation.getStats().toJson();
+    this.data.assets = {};
 
-  return "";
-}
+    for (const asset of assets) {
+      this.data.assets[path.relative(this.context, asset.info.sourceFilename)] =
+        asset.name;
+    }
 
-function parseJSON(content, loaderContext) {
-  try {
-    return JSON.parse(content);
-  } catch (error) {
-    return loaderContext.callback(
-      new Error(
-        `Invalid JSON in Web App Manifest: ${loaderContext.resourcePath}`
-      )
-    );
-  }
-}
-
-module.exports = function loader(content) {
-  const callback = this.callback;
-
-  if (!this["WebManifestPlugin"]) {
-    callback(
-      new Error(
-        "You forgot to add 'webpack-webmanifest-plugin' plugin (i.e. `{ plugins: [new WebManifestPlugin()] }`)"
-      )
-    );
-
-    return;
-  }
-
-  const manifest = parseJSON(content, this);
-  const importCode = getImportCode(manifest.icons);
-
-  this["WebManifestPlugin"].manifest = manifest;
-  this["WebManifestPlugin"].manifestRequest = this.request;
-
-  callback(null, `${importCode}`);
+    callback();
+  });
 };

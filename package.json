@@ -7,11 +7,12 @@
   "scripts": {
     "lint": "prettier \"{**/*,*}.js\" --write"
   },
-  "dependencies": {
-    "loader-utils": "^2.0.0"
-  },
   "devDependencies": {
     "clean-publish": "^2.2.0",
-    "prettier": "^2.3.2"
+    "prettier": "^2.3.2",
+    "simple-git-hooks": "^2.5.1"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "prettier \"{**/*,*}.js\" --write"
   }
 }
