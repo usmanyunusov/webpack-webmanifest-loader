@@ -1,5 +1,11 @@
 # Webpack WebManifest Plugin
 
+Minimalistic webpack plugin to generate webmanifest file (and process icons URLs).
+
+- Compatible with webpack 5 only (5.1+ required).
+- Zero dependency
+- Support cache busting
+
 ## Getting Started
 
 ```console
@@ -15,8 +21,8 @@ npm install -D webpack-webmanifest-plugin
       "src": "../images/touch/homescreen48.png",
       "sizes": "48x48",
       "type": "image/png"
-    },
-  ],
+    }
+  ]
 }
 ```
 

@@ -30,7 +30,7 @@ module.exports.pitch = function (request) {
 
   new EntryPlugin(
     this.context,
-    `${request}.webpack[javascript/auto]!=!${path.resolve(
+    `${this.requestPath}.manifest!=!${path.resolve(
       __dirname,
       "./loader-icons.js"
     )}!${request}`,
