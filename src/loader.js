@@ -37,22 +37,19 @@ module.exports.pitch = function (request) {
     path.parse(this.resourcePath).name
   ).apply(webmanifestContext.compiler);
 
-  webmanifestContext.compiler.hooks.compilation.tap(
-    `webmanifest-loader ${request}`,
+  const hookOptions = {
+    name: `webmanifest-loader ${request}`,
+    stage: Infinity,
+  };
+
+  webmanifestContext.compiler.hooks.thisCompilation.tap(
+    hookOptions,
     (compilation) => {
-      compilation.hooks.processAssets.tap(
-        {
-          name: `webmanifest-loader ${request}`,
-          stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
-        },
-        () => {
-          compilation.chunks.forEach((chunk) => {
-            chunk.files.forEach((file) => {
-              compilation.deleteAsset(file);
-            });
-          });
-        }
-      );
+      compilation.hooks.chunkAsset.tap(hookOptions, (chunk) => {
+        chunk.files.forEach((file) => {
+          compilation.deleteAsset(file);
+        });
+      });
     }
   );
 
