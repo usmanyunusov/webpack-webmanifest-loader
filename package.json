@@ -4,6 +4,7 @@
   "version": "1.0.3",
   "license": "MIT",
   "main": "src/index.js",
+  "repository": "usmanyunusov/webpack-webmanifest-plugin",
   "scripts": {
     "lint": "prettier \"{**/*,*}.js\" --write"
   },
