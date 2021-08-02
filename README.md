@@ -1,6 +1,6 @@
-# Webpack WebManifest Plugin
+# webpack-webmanifest-loader
 
-Minimalistic webpack plugin to generate webmanifest file (and process icons URLs).
+Minimalistic webpack loader to generate webmanifest file (and process icons URLs).
 
 - Compatible with webpack 5 only (5.1+ required).
 - Zero dependency
@@ -9,7 +9,7 @@ Minimalistic webpack plugin to generate webmanifest file (and process icons URLs
 ## Getting Started
 
 ```console
-npm install -D webpack-webmanifest-plugin
+npm install -D webpack-webmanifest-loader
 ```
 
 #### manifest.webmanifest
@@ -34,12 +34,10 @@ npm install -D webpack-webmanifest-plugin
 </head>
 ```
 
-Then add the plugin to your webpack config. For example:
+Then add the loader to your webpack config. For example:
 
 #### webpack.config.js
 ```js
-const WebManifestPlugin = require("webpack-webmanifest-plugin");
-
 module.exports = {
   module: {
     rules: [
@@ -49,7 +47,7 @@ module.exports = {
       },
       {
         test: /\.webmanifest$/i,
-        use: WebManifestPlugin.loader,
+        use:'webpack-webmanifest-loader',
         type: "asset/resource",
       },
     ],
