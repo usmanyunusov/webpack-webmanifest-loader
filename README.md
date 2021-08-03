@@ -3,8 +3,8 @@
 Minimalistic webpack loader to generate webmanifest file (and process icons URLs).
 
 - Compatible with webpack 5 only (5.1+ required).
-- Zero dependency
-- Support cache busting
+- Zero dependency.
+- Cache busting support.
 
 ## Getting Started
 
@@ -43,12 +43,12 @@ module.exports = {
     rules: [
       {
         test: /\.(png|svg|webp|jpg|jpeg)$/i,
-        type: "asset/resource",
+        type: 'asset/resource',
       },
       {
         test: /\.webmanifest$/i,
-        use:'webpack-webmanifest-loader',
-        type: "asset/resource",
+        use: 'webpack-webmanifest-loader',
+        type: 'asset/resource',
       },
     ],
   },
