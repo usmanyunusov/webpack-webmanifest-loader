@@ -4,7 +4,12 @@ const { parseJSON } = require("./utils");
 module.exports = function (source) {
   source = parseJSON(source, this);
 
-  if (source.icons && Array.isArray(source.icons)) {
+  if (
+    this.data &&
+    this.data.assets &&
+    source.icons &&
+    Array.isArray(source.icons)
+  ) {
     for (const icon of source.icons) {
       icon.src = this.data.assets[path.normalize(icon.src)];
     }
@@ -15,7 +20,7 @@ module.exports = function (source) {
 
 module.exports.pitch = function (request) {
   const { webpack } = this._compiler;
-  const { EntryPlugin, Compilation } = webpack;
+  const { EntryPlugin } = webpack;
   const callback = this.async();
 
   const webmanifestContext = {};
@@ -62,8 +67,11 @@ module.exports.pitch = function (request) {
     this.data.assets = {};
 
     for (const asset of assets) {
-      this.data.assets[path.relative(this.context, asset.info.sourceFilename)] =
-        asset.name;
+      if (asset.info && asset.info.sourceFilename) {
+        this.data.assets[
+          path.relative(this.context, asset.info.sourceFilename)
+        ] = asset.name;
+      }
     }
 
     callback();
