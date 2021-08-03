@@ -2,7 +2,7 @@
   "name": "webpack-webmanifest-loader",
   "author": "Usman Yunusov <usman.iunusov@gmail.com>",
   "description": "Minimalistic webpack loader to generate webmanifest file (and process icons URLs)",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "license": "MIT",
   "main": "src/index.js",
   "repository": "usmanyunusov/webpack-webmanifest-loader",
