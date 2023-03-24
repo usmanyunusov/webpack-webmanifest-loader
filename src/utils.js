@@ -5,7 +5,7 @@ function getImportIcons(icons, loaderContext) {
     const code = [];
 
     for (const icon of icons) {
-      const dep = `require('${path.resolve(loaderContext.context, icon.src)}')`;
+      const dep = `require(${JSON.stringify(path.resolve(loaderContext.context, icon.src))})`;
 
       if (!code.includes(dep)) {
         code.push(dep);
