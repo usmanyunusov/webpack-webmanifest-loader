@@ -68,8 +68,13 @@ module.exports.pitch = function (request) {
 
     for (const asset of assets) {
       if (asset.info && asset.info.sourceFilename) {
+        // Source filename is relative in development builds but absolute in production builds
+        const sourceFilename = path.isAbsolute(asset.info.sourceFilename)
+          ? asset.info.sourceFilename
+          : path.join(this.rootContext, asset.info.sourceFilename)
+          
         this.data.assets[
-          path.relative(this.context, asset.info.sourceFilename)
+          path.relative(this.context, sourceFilename)
         ] = asset.name;
       }
     }
