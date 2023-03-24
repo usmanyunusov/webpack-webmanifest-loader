@@ -69,7 +69,7 @@ module.exports.pitch = function (request) {
     for (const asset of assets) {
       if (asset.info && asset.info.sourceFilename) {
         this.data.assets[
-          path.relative(this.context, asset.info.sourceFilename)
+          path.relative(this.context, path.join(this.rootContext, asset.info.sourceFilename))
         ] = asset.name;
       }
     }
